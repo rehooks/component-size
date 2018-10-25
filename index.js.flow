@@ -3,9 +3,4 @@ interface ComponentSize {
   height: number,
 }
 
-interface ComponentSizeReturn {
-  size: ComponentSize,
-  ref: any,
-}
-
 declare export default function useComponentSize(): ComponentSize;
