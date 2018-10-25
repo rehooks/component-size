@@ -1,16 +1,19 @@
 'use strict'
-let { useState, useLayoutEffect, useRef } = require('react')
+let { useState, useLayoutEffect } = require('react')
 
 function getSize(el) {
+  if (!el) {
+    return {}
+  }
+
   return {
     width: el.offsetWidth,
     height: el.offsetHeight
   }
 }
 
-function useComponentSize() {
-  let ref = useRef(null)
-  let [size, setComponentSize] = useState(getSize({}))
+function useComponentSize(ref) {
+  let [ComponentSize, setComponentSize] = useState(getSize(ref.current))
 
   function handleResize() {
     if (ref && ref.current) {
@@ -27,7 +30,7 @@ function useComponentSize() {
     }
   }, [])
 
-  return { ref, size }
+  return ComponentSize
 }
 
 module.exports = useComponentSize

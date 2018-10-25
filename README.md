@@ -16,10 +16,12 @@ yarn add @rehooks/component-size
 ## Usage
 
 ```js
+import { useRef } from 'react'
 import useComponentSize from '@rehooks/component-size'
 
 function MyComponent() {
-  let { ref, size } = useComponentSize()
+  let ref = useRef(null)
+  let size = useComponentSize(ref)
   // size == { width: 100, height: 200 }
   let { width, height } = size
   let imgUrl = `https://via.placeholder.com/${width}x${height}`
