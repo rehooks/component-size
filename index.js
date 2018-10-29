@@ -1,5 +1,6 @@
 'use strict'
 let { useState, useLayoutEffect } = require('react')
+let ResizeObserver = require('resize-observer-polyfill').default
 
 function getSize(el) {
   if (!el) {
@@ -23,10 +24,13 @@ function useComponentSize(ref) {
 
   useLayoutEffect(() => {
     handleResize()
-    window.addEventListener('resize', handleResize)
+    const resizeObserver = new ResizeObserver(() => handleResize())
+
+    resizeObserver.observe(ref.current)
 
     return () => {
-      window.removeEventListener('resize', handleResize)
+      resizeObserver.disconnect(ref.current)
+      resizeObserver = null
     }
   }, [])
 
