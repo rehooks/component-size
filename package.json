@@ -22,8 +22,7 @@
     "example": "parcel example.html"
   },
   "peerDependencies": {
-    "react": "^16.7.0-alpha.0",
-    "resize-observer-polyfill": "^1.5.0"
+    "react": "^16.7.0-alpha.0"
   },
   "devDependencies": {
     "ava": "^0.25.0",
