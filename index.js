@@ -22,18 +22,24 @@ function useComponentSize(ref) {
   }
 
   useLayoutEffect(() => {
-    if (!ResizeObserver) {
-      throw new Error('Include ResizeObserver Polyfill')
-    }
     handleResize()
-    const resizeObserver = new ResizeObserver(() => handleResize())
 
-    resizeObserver.observe(ref.current)
+    if (ResizeObserver) {
+      const resizeObserver = new ResizeObserver(() => handleResize())
+      resizeObserver.observe(ref.current)
 
-    return () => {
-      resizeObserver.disconnect(ref.current)
-      resizeObserver = null
+      return () => {
+        resizeObserver.disconnect(ref.current)
+        resizeObserver = null
+      }
+    } else {
+      window.addEventListener('resize', handleResize)
+      
+      return () => {
+        window.removeEventListener('resize', handleResize) 
+      }
     }
+    
   }, [])
 
   return ComponentSize
