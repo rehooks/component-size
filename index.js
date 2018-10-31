@@ -25,7 +25,7 @@ function useComponentSize(ref) {
     handleResize()
 
     if (ResizeObserver) {
-      const resizeObserver = new ResizeObserver(() => handleResize())
+      let resizeObserver = new ResizeObserver(() => handleResize())
       resizeObserver.observe(ref.current)
 
       return () => {
