@@ -1,5 +1,5 @@
 'use strict'
-let { useState, useLayoutEffect } = require('react')
+let { useCallback, useState, useLayoutEffect } = require('react')
 
 function getSize(el) {
   if (!el) {
@@ -15,13 +15,18 @@ function getSize(el) {
 function useComponentSize(ref) {
   let [ComponentSize, setComponentSize] = useState(getSize(ref.current))
 
-  function handleResize() {
-    if (ref && ref.current) {
-      setComponentSize(getSize(ref.current))
-    }
-  }
+  const handleResize = useCallback(
+    function handleResize() {
+      if (ref.current) {
+        setComponentSize(getSize(ref.current))
+      }
+    },
+    [ref]
+  )
 
   useLayoutEffect(() => {
+    if (!ref.current) { return }
+
     handleResize()
 
     if (ResizeObserver) {
@@ -40,7 +45,7 @@ function useComponentSize(ref) {
       }
     }
     
-  }, [])
+  }, [ref.current])
 
   return ComponentSize
 }
