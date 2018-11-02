@@ -29,7 +29,7 @@ function useComponentSize(ref) {
 
     handleResize()
 
-    if (ResizeObserver) {
+    if (typeof ResizeObserver === 'function') {
       let resizeObserver = new ResizeObserver(() => handleResize())
       resizeObserver.observe(ref.current)
 
