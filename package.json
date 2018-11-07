@@ -25,6 +25,7 @@
     "react": "^16.7.0-alpha.0"
   },
   "devDependencies": {
+    "@types/react": "^16.4.18",
     "ava": "^0.25.0",
     "browser-env": "^3.2.5",
     "parcel": "^1.10.3",
