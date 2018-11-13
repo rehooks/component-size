@@ -24,7 +24,7 @@ function useComponentSize(ref) {
   useLayoutEffect(() => {
     handleResize()
 
-    if (ResizeObserver) {
+    if (window.ResizeObserver) {
       let resizeObserver = new ResizeObserver(() => handleResize())
       resizeObserver.observe(ref.current)
 
