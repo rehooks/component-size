@@ -12,7 +12,10 @@ function App() {
     <div style={{ width: '100%', height: '100%' }}>
       <pre>{JSON.stringify({ width, height })}</pre>
       <button onClick={() => setFullWidth(!fullWidth)}>Toggle Size</button>
-      <div ref={ref} style={{ width: fullWidth ? '100%' : '50%', height: '50%' }}>
+      <div
+        ref={ref}
+        style={{ width: fullWidth ? '100%' : '50%', height: '50%' }}
+      >
         <img src={imgUrl} width={width} height={height} />
       </div>
     </div>

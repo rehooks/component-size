@@ -3,7 +3,10 @@ let { useCallback, useState, useLayoutEffect } = require('react')
 
 function getSize(el) {
   if (!el) {
-    return {}
+    return {
+      width: 0,
+      height: 0
+    }
   }
 
   return {
@@ -13,7 +16,9 @@ function getSize(el) {
 }
 
 function useComponentSize(ref) {
-  let [ComponentSize, setComponentSize] = useState(getSize(ref.current))
+  let [ComponentSize, setComponentSize] = useState(
+    getSize(ref ? ref.current : {})
+  )
 
   const handleResize = useCallback(
     function handleResize() {
@@ -24,28 +29,32 @@ function useComponentSize(ref) {
     [ref]
   )
 
-  useLayoutEffect(() => {
-    if (!ref.current) { return }
-
-    handleResize()
-
-    if (typeof ResizeObserver === 'function') {
-      let resizeObserver = new ResizeObserver(() => handleResize())
-      resizeObserver.observe(ref.current)
-
-      return () => {
-        resizeObserver.disconnect(ref.current)
-        resizeObserver = null
+  useLayoutEffect(
+    () => {
+      if (!ref.current) {
+        return
       }
-    } else {
-      window.addEventListener('resize', handleResize)
-      
-      return () => {
-        window.removeEventListener('resize', handleResize) 
+
+      handleResize()
+
+      if (typeof ResizeObserver === 'function') {
+        let resizeObserver = new ResizeObserver(() => handleResize())
+        resizeObserver.observe(ref.current)
+
+        return () => {
+          resizeObserver.disconnect(ref.current)
+          resizeObserver = null
+        }
+      } else {
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+          window.removeEventListener('resize', handleResize)
+        }
       }
-    }
-    
-  }, [ref.current])
+    },
+    [ref.current]
+  )
 
   return ComponentSize
 }
