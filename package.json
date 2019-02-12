@@ -22,7 +22,7 @@
     "example": "parcel example.html"
   },
   "peerDependencies": {
-    "react": "16.7.0-alpha.0"
+    "react": ">=16.8.0"
   },
   "devDependencies": {
     "@types/react": "16.4.18",
