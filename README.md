@@ -39,7 +39,7 @@ function MyComponent() {
 [Resize Observer](https://developers.google.com/web/updates/2016/10/resizeobserver)
 is the API is used to determine if an element is resized. Browser support is pretty good in Chrome, but is still missing support in other major browsers.
 
-> [Can i use ResizeObserver?](https://caniuse.com/#feat=ResizeObserver)
+> [Can i use ResizeObserver?](https://caniuse.com/#feat=resizeobserver)
 
 ### Polyfill
 
