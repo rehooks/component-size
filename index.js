@@ -1,8 +1,8 @@
 'use strict'
-var _require = require('react')
-var useCallback = _require.useCallback
-var useState = _require.useState
-var useLayoutEffect = _require.useLayoutEffect
+var React = require('react')
+var useState = React.useState
+var useCallback = React.useCallback
+var useLayoutEffect = React.useLayoutEffect
 
 function getSize(el) {
   if (!el) {
@@ -33,7 +33,7 @@ function useComponentSize(ref) {
   )
 
   useLayoutEffect(
-    function () {
+    function() {
       if (!ref.current) {
         return
       }
@@ -41,17 +41,19 @@ function useComponentSize(ref) {
       handleResize()
 
       if (typeof ResizeObserver === 'function') {
-        var resizeObserver = new ResizeObserver(function () { handleResize() })
+        var resizeObserver = new ResizeObserver(function() {
+          handleResize()
+        })
         resizeObserver.observe(ref.current)
 
-        return function () {
+        return function() {
           resizeObserver.disconnect(ref.current)
           resizeObserver = null
         }
       } else {
         window.addEventListener('resize', handleResize)
 
-        return function () {
+        return function() {
           window.removeEventListener('resize', handleResize)
         }
       }
