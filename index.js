@@ -1,8 +1,5 @@
 'use strict'
-var React = require('react')
-var useState = React.useState
-var useCallback = React.useCallback
-var useLayoutEffect = React.useLayoutEffect
+let { useCallback, useState, useLayoutEffect } = require('react')
 
 function getSize(el) {
   if (!el) {
@@ -19,11 +16,11 @@ function getSize(el) {
 }
 
 function useComponentSize(ref) {
-  var _useState = useState(getSize(ref ? ref.current : {}))
-  var ComponentSize = _useState[0]
-  var setComponentSize = _useState[1]
+  let [ComponentSize, setComponentSize] = useState(
+    getSize(ref ? ref.current : {})
+  )
 
-  var handleResize = useCallback(
+  const handleResize = useCallback(
     function handleResize() {
       if (ref.current) {
         setComponentSize(getSize(ref.current))
@@ -33,7 +30,7 @@ function useComponentSize(ref) {
   )
 
   useLayoutEffect(
-    function() {
+    () => {
       if (!ref.current) {
         return
       }
@@ -41,19 +38,17 @@ function useComponentSize(ref) {
       handleResize()
 
       if (typeof ResizeObserver === 'function') {
-        var resizeObserver = new ResizeObserver(function() {
-          handleResize()
-        })
+        let resizeObserver = new ResizeObserver(() => handleResize())
         resizeObserver.observe(ref.current)
 
-        return function() {
+        return () => {
           resizeObserver.disconnect(ref.current)
           resizeObserver = null
         }
       } else {
         window.addEventListener('resize', handleResize)
 
-        return function() {
+        return () => {
           window.removeEventListener('resize', handleResize)
         }
       }
