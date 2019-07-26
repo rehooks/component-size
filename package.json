@@ -15,7 +15,8 @@
     "component-size"
   ],
   "files": [
-    "index.*"
+    "index.*",
+    "dist/*"
   ],
   "scripts": {
     "clean": "rimraf dist",
