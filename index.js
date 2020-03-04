@@ -63,7 +63,7 @@ function useComponentSize(ref, opts) {
         }
       }
     },
-    [ref.current]
+    [ref.current, ResizeObserverConstructor]
   )
 
   return ComponentSize
