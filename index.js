@@ -12,9 +12,10 @@ function getSize(el) {
     }
   }
 
+  var boundingRect = el.getBoundingClientRect();
   return {
-    width: el.offsetWidth,
-    height: el.offsetHeight
+    width: boundingRect.width,
+    height: boundingRect.height,
   }
 }
 
