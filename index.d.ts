@@ -3,4 +3,4 @@ interface ComponentSize {
   height: number
 }
 
-export default function useComponentSize<T = any>(ref: React.RefObject<T>): ComponentSize
+export default function useComponentSize<T extends Element = Element>(ref: React.RefObject<T>): ComponentSize
