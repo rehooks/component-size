@@ -9,12 +9,19 @@ yarn add @rehooks/component-size
 ## Usage
 
 ```js
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import useComponentSize from '@rehooks/component-size'
 
 function MyComponent() {
-  let ref = useRef(null)
-  let size = useComponentSize(ref)
+  const [imgElem, setImageElem] = useState(null);
+  // callback ref to ensure re-render when ref is set, as per React docs
+  // https://reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node
+  let ref = useCallback(elem => {
+    if (elem !== null) {
+      setImgElem(elem)
+    }
+  }, [])
+  let size = useComponentSize(imgElem)
   // size == { width: 100, height: 200 }
   let { width, height } = size
   let imgUrl = `https://via.placeholder.com/${width}x${height}`
