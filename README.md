@@ -64,34 +64,51 @@ useComponentSize(ref, { ResizeObserver });
 
 If you are using Webpack (or similar) you could use [dynamic
 imports](https://webpack.js.org/api/module-methods/#import), to load the
-Polyfill only if needed. A basic implementation could look something like this:
+Polyfill only if needed. A basic implementation in your component could look
+something like this:
 
 ```js
-function getResizeObserver() {
-  if (
-    'ResizeObserver' in global &&
-    'ResizeObserverEntry' in global &&
-    'contentRect' in ResizeObserverEntry.prototype
-  ) {
-    return Promise.resolve(ResizeObserver);
+// GetResizeObserver.js
+// Ponyfill, not polyfill, since we're not chaging the global
+// `window.ResizeObserver` variable
+let ResizeObserverPonyfill;
+
+export async function getResizeObserverOrPonyfill() {
+  const BuiltinResizeObserver = window.ResizeObserver;
+  if (BuiltinResizeObserver) {
+    return BuiltinResizeObserver;
   }
-  return import('resize-observer-polyfill');
+  ResizeObserverPonyfill = (await import("resize-observer-polyfill")).default;
+  return ResizeObserverPonyfill;
 }
+
 ```
 
-And in your component:
 ```js
-const [ResizeObserverApi, setResizeObserverApi] = setState();
+// Your component
+const [ResizeObserver, setResizeObserver] = useState(
+  window.ResizeObserver);
+
 useEffect(() => {
+  if (ResizeObserver) {
+    return; // don't need to load the ponyfill
+  }
   let cancelled = false;
-  getResizeObserver().then(observer => {
+
+  // if imported multiple times, should load from browser cache;
+  // or you can cache this in a variable
+  getResizeObserverOrPonyfill().then(lib => {
     if (!cancelled) {
-      setResizeObserverApi(observer);
+      // must wrap `lib` in a function: `ResizeObserver` is a function
+      // itself, so prevent the state hook from interpreting as a reducer
+      setResizeObserver(() => lib);
     }
   });
+
   return () => {
+    // if unmounted before complete, don't call set state
     cancelled = true;
   }
 }, []);
-useComponentSize(ref, { ResizeObserver: ResizeObserverApi });
+useComponentSize(ref, { ResizeObserver });
 ```
