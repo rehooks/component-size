@@ -18,7 +18,12 @@ function getSize(el) {
   }
 }
 
-function useComponentSize(ref) {
+function useComponentSize(ref, opts) {
+  var ResizeObserverConstructor = opts && opts.ResizeObserver
+    ? opts.ResizeObserver
+    : typeof ResizeObserver === 'function'
+      ? ResizeObserver
+      : undefined;
   var _useState = useState(getSize(ref ? ref.current : {}))
   var ComponentSize = _useState[0]
   var setComponentSize = _useState[1]
@@ -40,8 +45,8 @@ function useComponentSize(ref) {
 
       handleResize()
 
-      if (typeof ResizeObserver === 'function') {
-        var resizeObserver = new ResizeObserver(function() {
+      if (ResizeObserverConstructor) {
+        var resizeObserver = new ResizeObserverConstructor(function() {
           handleResize()
         })
         resizeObserver.observe(ref.current)
@@ -58,7 +63,7 @@ function useComponentSize(ref) {
         }
       }
     },
-    [ref.current]
+    [ref.current, ResizeObserverConstructor]
   )
 
   return ComponentSize
