@@ -3,6 +3,15 @@ var React = require('react')
 var useState = React.useState
 var useCallback = React.useCallback
 var useLayoutEffect = React.useLayoutEffect
+var useEffect = React.useEffect
+/**
++* To properly measure. we need useLayoutEffect in the client but it generates a warning in the console
++* since it has no effect when it runs on the server. This is to work around it.
++* We've used this implementation: https://github.com/streamich/react-use/blob/master/src/useIsomorphicLayoutEffect.ts
+ *
+ * See this issue for more details: https://github.com/rehooks/component-size/issues/32
+ */
+var useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
 function getSize(el) {
   if (!el) {
@@ -32,7 +41,7 @@ function useComponentSize(ref) {
     [ref]
   )
 
-  useLayoutEffect(
+  useIsomorphicLayoutEffect(
     function() {
       if (!ref.current) {
         return
