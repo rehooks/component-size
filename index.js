@@ -1,8 +1,8 @@
 'use strict'
-var React = require('react')
-var useState = React.useState
-var useCallback = React.useCallback
-var useLayoutEffect = React.useLayoutEffect
+const React = require('react')
+const useState = React.useState
+const useCallback = React.useCallback
+const useLayoutEffect = React.useLayoutEffect
 
 function getSize(el) {
   if (!el) {
@@ -19,14 +19,18 @@ function getSize(el) {
 }
 
 function useComponentSize(ref) {
-  var _useState = useState(getSize(ref ? ref.current : {}))
-  var ComponentSize = _useState[0]
-  var setComponentSize = _useState[1]
+  const _useState = useState(getSize(ref ? ref.current : {}))
+  const ComponentSize = _useState[0]
+  const setComponentSize = _useState[1]
 
-  var handleResize = useCallback(
+  const handleResize = useCallback(
     function handleResize() {
       if (ref.current) {
-        setComponentSize(getSize(ref.current))
+        const newSize = getSize(ref.current)
+
+        if (ComponentSize.width !== newSize.width || ComponentSize.height !== newSize.height) {
+          setComponentSize(newSize)
+        }
       }
     },
     [ref]
